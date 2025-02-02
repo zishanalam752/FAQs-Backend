@@ -1,0 +1,72 @@
+.App {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.App-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.admin-section,
+.faq-section {
+  margin-bottom: 40px;
+}
+
+h1, h2 {
+  color: #333;
+}
+
+.faq-form {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 8px;
+  font-size: 16px;
+}
+
+.ql-container {
+  min-height: 200px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:disabled {
+  background-color: #ccc;
+}
+
+.faq-item {
+  border: 1px solid #ddd;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+}
+
+.language-selector {
+  margin-bottom: 20px;
+}
+
+.language-selector select {
+  padding: 8px;
+  font-size: 16px;
+} 
