@@ -124,7 +124,7 @@
   transform: scale(1.1);
 }
 
-/* Update icon animations */
+/* Update icon animations - specifically target the arrow icon */
 .faq-question .MuiSvgIcon-root {
   color: #2c3e50;
   transition: all 0.3s ease;
@@ -136,9 +136,18 @@
   color: #1a202c;
 }
 
-/* Add specific styles for the open state arrow */
-.faq-item.open .MuiSvgIcon-root {
+/* Add specific styles for the open state arrow - only target the arrow in question */
+.faq-item.open .faq-question .MuiSvgIcon-root {
   transform: rotate(180deg);
+}
+
+/* Separate styles for action icons (edit and delete) */
+.faq-actions .MuiSvgIcon-root {
+  transition: transform 0.2s ease;
+}
+
+.faq-actions .MuiIconButton-root:hover .MuiSvgIcon-root {
+  transform: scale(1.1);
 }
 
 /* Responsive design */
