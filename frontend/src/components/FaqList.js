@@ -4,17 +4,93 @@ import { useNavigate } from 'react-router-dom';
 import { 
   Container, 
   Typography, 
-  Card, 
-  CardContent, 
+  Box, 
+  IconButton, 
   Select, 
-  MenuItem, 
-  Box,
-  IconButton
+  MenuItem,
+  Paper
 } from '@mui/material';
+import { motion, AnimatePresence } from 'framer-motion';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import '../styles/FaqList.css';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+
+const FaqItem = ({ faq, onEdit, onDelete }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      className="faq-card"
+    >
+      <Paper 
+        elevation={2} 
+        className={`faq-item ${isOpen ? 'open' : ''}`}
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <Box className="faq-header">
+          <Typography 
+            variant="h6" 
+            className="faq-question"
+            sx={{ 
+              fontWeight: 600,
+              color: '#2c3e50',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px'
+            }}
+          >
+            <KeyboardArrowDownIcon />
+            {faq.question}
+          </Typography>
+          <Box className="faq-actions">
+            <IconButton onClick={(e) => {
+              e.stopPropagation();
+              onEdit(faq._id);
+            }}>
+              <EditIcon color="primary" />
+            </IconButton>
+            <IconButton onClick={(e) => {
+              e.stopPropagation();
+              onDelete(faq._id);
+            }}>
+              <DeleteIcon color="error" />
+            </IconButton>
+          </Box>
+        </Box>
+        
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="faq-answer"
+            >
+              <Typography 
+                variant="body1" 
+                sx={{ 
+                  color: '#34495e',
+                  lineHeight: 1.6,
+                  mt: 2
+                }}
+              >
+                {faq.answer}
+              </Typography>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </Paper>
+    </motion.div>
+  );
+};
 
 const FaqList = () => {
   const navigate = useNavigate();
@@ -74,26 +150,7 @@ const FaqList = () => {
       </Box>
 
       {faqs.map((faq) => (
-        <Card key={faq._id} sx={{ mb: 2 }}>
-          <CardContent>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-              <Typography variant="h6" component="h2">
-                {faq.question}
-              </Typography>
-              <Box>
-                <IconButton onClick={() => handleEdit(faq._id)}>
-                  <EditIcon />
-                </IconButton>
-                <IconButton onClick={() => handleDelete(faq._id)}>
-                  <DeleteIcon />
-                </IconButton>
-              </Box>
-            </Box>
-            <Typography variant="body1" sx={{ mt: 1 }}>
-              {faq.answer}
-            </Typography>
-          </CardContent>
-        </Card>
+        <FaqItem key={faq._id} faq={faq} onEdit={handleEdit} onDelete={handleDelete} />
       ))}
     </Container>
   );

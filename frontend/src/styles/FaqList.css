@@ -1,0 +1,157 @@
+.faq-card {
+  margin-bottom: 16px;
+  cursor: pointer;
+}
+
+.faq-item {
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-radius: 12px !important;
+  transition: all 0.3s ease-in-out;
+  border: 1px solid rgba(236, 240, 241, 0.8);
+  transform-origin: left;
+}
+
+.faq-item:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1) !important;
+  background: rgba(255, 255, 255, 0.98) !important;
+}
+
+.faq-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.faq-question {
+  flex-grow: 1;
+  padding-right: 16px;
+  font-family: 'Poppins', sans-serif;
+  position: relative;
+  transition: all 0.3s ease;
+  color: #2c3e50;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transform-origin: left;
+}
+
+.faq-question:hover {
+  color: #1a202c !important;
+  transform: translateX(8px);
+}
+
+.faq-actions {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.faq-item:hover .faq-actions {
+  opacity: 1;
+}
+
+.faq-answer {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(236, 240, 241, 0.8);
+  overflow: hidden;
+}
+
+/* Language selector styling */
+.language-selector {
+  margin-bottom: 32px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.MuiSelect-select {
+  min-width: 120px !important;
+}
+
+/* Animation keyframes */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Custom scrollbar for answer text */
+.faq-answer::-webkit-scrollbar {
+  width: 6px;
+}
+
+.faq-answer::-webkit-scrollbar-track {
+  background: rgba(236, 240, 241, 0.5);
+  border-radius: 3px;
+}
+
+.faq-answer::-webkit-scrollbar-thumb {
+  background: #bdc3c7;
+  border-radius: 3px;
+}
+
+.faq-answer::-webkit-scrollbar-thumb:hover {
+  background: #95a5a6;
+}
+
+/* Typography enhancements */
+.faq-question {
+  font-size: 1.1rem !important;
+  letter-spacing: 0.3px;
+}
+
+.faq-answer p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #576574;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Icon animations */
+.MuiSvgIcon-root {
+  transition: transform 0.3s ease;
+}
+
+.faq-item:hover .MuiSvgIcon-root {
+  transform: scale(1.1);
+}
+
+/* Update icon animations */
+.faq-question .MuiSvgIcon-root {
+  color: #2c3e50;
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+
+/* Remove the hover rotation since we'll control it with open/close state */
+.faq-question:hover .MuiSvgIcon-root {
+  color: #1a202c;
+}
+
+/* Add specific styles for the open state arrow */
+.faq-item.open .MuiSvgIcon-root {
+  transform: rotate(180deg);
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+  .faq-actions {
+    opacity: 1;
+  }
+  
+  .faq-question {
+    font-size: 1rem !important;
+  }
+  
+  .faq-item {
+    padding: 16px;
+  }
+} 
