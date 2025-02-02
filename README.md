@@ -137,7 +137,7 @@ The application includes comprehensive error handling for:
 
 ## Support
 
-For support, email [your-email@example.com](mailto:your-email@example.com)
+For support, email [zishanalam752@gmail.com](mailto:your-email@example.com)
 
 ## Acknowledgments
 
