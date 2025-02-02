@@ -1,11 +1,6 @@
 const mongoose = require('mongoose');
 
-const translationSchema = new mongoose.Schema({
-  language: {
-    type: String,
-    required: true,
-    enum: ['en', 'hi', 'bn'] // English, Hindi, Bengali
-  },
+const faqSchema = new mongoose.Schema({
   question: {
     type: String,
     required: true
@@ -13,19 +8,14 @@ const translationSchema = new mongoose.Schema({
   answer: {
     type: String,
     required: true
-  }
-});
-
-const faqSchema = new mongoose.Schema({
-  translations: [translationSchema],
-  createdAt: {
-    type: Date,
-    default: Date.now
   },
-  updatedAt: {
-    type: Date,
-    default: Date.now
+  language: {
+    type: String,
+    default: 'en',
+    enum: ['en', 'es', 'fr', 'de', 'hi'] // supported languages
   }
+}, {
+  timestamps: true
 });
 
-module.exports = mongoose.model('Faq', faqSchema); 
+module.exports = mongoose.model('FAQ', faqSchema); 

@@ -69,4 +69,29 @@ button:disabled {
 .language-selector select {
   padding: 8px;
   font-size: 16px;
+}
+
+.MuiAppBar-root {
+  background-color: #1976d2 !important;
+}
+
+.MuiContainer-root {
+  min-height: calc(100vh - 64px);
+}
+
+.MuiButton-root {
+  text-transform: none !important;
+}
+
+/* Optional: Add hover effect to navigation buttons */
+.MuiButton-root:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.MuiButton-contained:hover {
+  color: black !important;
+}
+
+.MuiButton-outlined:hover {
+  color: black !important;
 } 

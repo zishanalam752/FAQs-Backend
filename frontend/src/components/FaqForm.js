@@ -1,89 +1,168 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import {
+  Container,
+  TextField,
+  Button,
+  Typography,
+  Box,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
+  Paper
+} from '@mui/material';
+import TranslateIcon from '@mui/icons-material/Translate';
+import SaveIcon from '@mui/icons-material/Save';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-// Try the default Express port 3000 or 5000
-const API_URL = 'http://localhost:3000/api';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 const FaqForm = () => {
-  const [question, setQuestion] = useState('');
-  const [answer, setAnswer] = useState('');
-  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const [formData, setFormData] = useState({
+    question: '',
+    answer: '',
+    language: 'en'
+  });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
+  const languages = [
+    { code: 'en', name: 'English' },
+    { code: 'es', name: 'Spanish' },
+    { code: 'fr', name: 'French' },
+    { code: 'de', name: 'German' },
+    { code: 'hi', name: 'Hindi' }
+  ];
+
+  useEffect(() => {
+    if (id) {
+      fetchFaq();
+    }
+  }, [id]);
+
+  const fetchFaq = async () => {
     try {
-      setLoading(true);
-      console.log('Attempting to connect to:', `${API_URL}/faqs`);
-      
-      const response = await axios.post(`${API_URL}/faqs`, {
-        question,
-        answer
-      }, {
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        withCredentials: false,
-        // Add timeout to get faster error feedback
-        timeout: 5000
+      const response = await axios.get(`${API_URL}/faqs/${id}`);
+      setFormData({
+        question: response.data.question,
+        answer: response.data.answer,
+        language: response.data.language || 'en'
       });
-
-      if (response.status === 200 || response.status === 201) {
-        setQuestion('');
-        setAnswer('');
-        alert('FAQ created successfully!');
-      }
     } catch (error) {
-      console.error('Full error details:', error);
-      
-      if (error.code === 'ERR_NETWORK') {
-        alert('Backend server is not running. Please start the backend server on port 5000.');
-      } else if (error.response?.status === 404) {
-        alert('API endpoint not found. Please check the backend URL and routes.');
-      } else if (error.response?.status === 500) {
-        alert('Server error. Please check backend logs.');
-      } else {
-        alert(`Error creating FAQ: ${error.response?.data?.message || error.message}`);
-      }
-    } finally {
-      setLoading(false);
+      console.error('Error fetching FAQ:', error);
     }
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (id) {
+        await axios.put(`${API_URL}/faqs/${id}`, formData);
+      } else {
+        await axios.post(`${API_URL}/faqs`, formData);
+      }
+      navigate('/');
+    } catch (error) {
+      console.error('Error saving FAQ:', error);
+    }
+  };
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="faq-form">
-      <div className="form-group">
-        <label>Question:</label>
-        <input
-          type="text"
-          value={question}
-          onChange={(e) => setQuestion(e.target.value)}
-          required
-          className="form-control"
-        />
-      </div>
+    <Container maxWidth="md">
+      <Paper elevation={3} sx={{ p: 4, mt: 4 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 4 }}>
+          <Typography variant="h4" component="h1">
+            {id ? 'Edit FAQ' : 'Add New FAQ'}
+          </Typography>
+        </Box>
 
-      <div className="form-group">
-        <label>Answer:</label>
-        <ReactQuill
-          value={answer}
-          onChange={setAnswer}
-          modules={{
-            toolbar: [
-              ['bold', 'italic', 'underline'],
-              ['link'],
-              [{ list: 'ordered' }, { list: 'bullet' }]
-            ]
-          }}
-        />
-      </div>
+        <form onSubmit={handleSubmit}>
+          <FormControl fullWidth sx={{ mb: 3 }}>
+            <InputLabel id="language-label">
+              <TranslateIcon sx={{ mr: 1 }} />
+              Language
+            </InputLabel>
+            <Select
+              labelId="language-label"
+              name="language"
+              value={formData.language}
+              onChange={handleChange}
+              label="Language"
+            >
+              {languages.map((lang) => (
+                <MenuItem key={lang.code} value={lang.code}>
+                  {lang.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
 
-      <button type="submit" disabled={loading} className="btn btn-primary">
-        {loading ? 'Creating...' : 'Create FAQ'}
-      </button>
-    </form>
+          <TextField
+            fullWidth
+            label="Question"
+            name="question"
+            value={formData.question}
+            onChange={handleChange}
+            margin="normal"
+            required
+            multiline
+            rows={2}
+          />
+
+          <TextField
+            fullWidth
+            label="Answer"
+            name="answer"
+            value={formData.answer}
+            onChange={handleChange}
+            margin="normal"
+            required
+            multiline
+            rows={4}
+          />
+
+          <Box sx={{ mt: 4, display: 'flex', gap: 2 }}>
+            <Button
+              variant="contained"
+              color="primary"
+              type="submit"
+              startIcon={<SaveIcon />}
+              sx={{
+                '&:hover': {
+                  color: 'black',
+                  backgroundColor: '#1565c0'
+                }
+              }}
+            >
+              {id ? 'Update FAQ' : 'Save FAQ'}
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={() => navigate('/')}
+              startIcon={<ArrowBackIcon />}
+              sx={{
+                '&:hover': {
+                  color: 'black',
+                  borderColor: '#1565c0',
+                  backgroundColor: 'rgba(21, 101, 192, 0.04)'
+                }
+              }}
+            >
+              Back to List
+            </Button>
+          </Box>
+        </form>
+      </Paper>
+    </Container>
   );
 };
 

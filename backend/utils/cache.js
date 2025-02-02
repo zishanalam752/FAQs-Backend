@@ -8,7 +8,6 @@ const cacheUtils = {
     const value = await redis.get(key);
     return value ? JSON.parse(value) : null;
   },
-
   async set(key, value) {
     await redis.setex(key, CACHE_DURATION, JSON.stringify(value));
   },
